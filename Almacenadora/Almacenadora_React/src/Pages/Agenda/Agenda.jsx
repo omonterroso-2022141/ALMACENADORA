@@ -1,4 +1,4 @@
-import { convertedFecha, fechaValidationMessage, usernameValidationMessage, validateActivo, validateCaracteres, validateFecha, validateUsername } from "../../shared/validators/validaroAll.js"
+import { activoValidationMessage, cadenaValidationMessage, cambioTrueFalse, convertedFecha, fechaValidationMessage, usernameValidationMessage, validateActivo, validateCaracteres, validateFecha, validateUsername } from "../../shared/validators/validaroAll.js"
 import { Input } from "../../components/Input.jsx"
 import { useState } from "react"
 import { useAgenda } from "../../shared/hooks/useAgenda.jsx"
@@ -97,32 +97,10 @@ export const Agenda = () => {
       formData.descripcion.value,
       formData.fechaInicio.value,
       formData.fechaFin.value,
-      formData.activo.value
+      cambioTrueFalse(formData.activo.value)
     );
     navigate('/agendas');
-  };
-  
-  const handleStartDateChange = (date) => {
-    setStartDate(date);
-    setFormData(prevData => ({
-      ...prevData,
-      fechaInicio: {
-        ...prevData.fechaInicio,
-        isValid: date !== null
-      }
-    }));
-  };
-
-  const handleEndDateChange = (date) => {
-    setEndDate(date);
-    setFormData(prevData => ({
-      ...prevData,
-      fechaFin: {
-        ...prevData.fechaFin,
-        isValid: date !== null
-      }
-    }));
-  };
+  }
 
   const isSubmitButtonDisable = !formData.nombre.isValid ||
     !formData.descripcion.isValid ||
@@ -144,6 +122,7 @@ export const Agenda = () => {
           onChangeHandler={onValueChange}
           onBlurHandler={handleValidationOnBlur}
           showErrorMessage={formData.nombre.showError}
+          validationMessage={usernameValidationMessage}
           placeholder={'Nombre de la tarea'}
         />
 
@@ -155,6 +134,7 @@ export const Agenda = () => {
           onChangeHandler={onValueChange}
           onBlurHandler={handleValidationOnBlur}
           showErrorMessage={formData.descripcion.showError}
+          validationMessage={cadenaValidationMessage}
           placeholder={'Descripcion breve de la tarea'}
         />
 
@@ -198,7 +178,8 @@ export const Agenda = () => {
           onChangeHandler={onValueChange}
           onBlurHandler={handleValidationOnBlur}
           showErrorMessage={formData.activo.showError}
-          placeholder={'True o False'}
+          validationMessage={activoValidationMessage}
+          placeholder={'Activada o Desactivada'}
         />
         <div style={{ display: 'flex', width: '50%', gap: '10%' }}>
           <button style={{ backgroundColor: '#22c063' }} disabled={isSubmitButtonDisable}>Agregar</button>

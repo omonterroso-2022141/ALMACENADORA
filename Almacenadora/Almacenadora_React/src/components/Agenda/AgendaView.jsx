@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import {
   activoValidationMessage,
   cadenaValidationMessage,
+  cambioTrueFalse,
   convertedFecha,
   fechaValidationMessage,
   usernameValidationMessage,
@@ -13,6 +14,7 @@ import {
   validateUsername
 } from '../../shared/validators/validaroAll.js'
 import { Input } from '../../components/Input.jsx'
+import DatePicker from 'react-datepicker'
 import { useState } from 'react'
 
 export const AgendaView = ({ setestado }) => {
@@ -132,17 +134,15 @@ export const AgendaView = ({ setestado }) => {
       id,
       formData.nombre.value,
       formData.descripcion.value,
-      convertedFecha(formData.fechaInicio.value),
-      convertedFecha(formData.fechaFin.value),
-      formData.activo.value
+      formData.fechaInicio.value,
+      formData.fechaFin.value,
+      cambioTrueFalse(formData.activo.value)
     )
     navigate('../agendas')
   }
 
   const isSubmitButtonDisable = !formData.nombre.isValid ||
     !formData.descripcion.isValid ||
-    !formData.fechaInicio.isValid ||
-    !formData.fechaFin.isValid ||
     !formData.activo.isValid
 
   return (
@@ -178,29 +178,35 @@ export const AgendaView = ({ setestado }) => {
           placeholder={descripcion}
         />
 
-        <Input
-          field='fechaInicio'
-          label={'Fecha Inicio:'}
-          type='text'
-          value={formData.fechaInicio.value}
-          onChangeHandler={onValueChange}
-          onBlurHandler={handleValidationOnBlur}
-          showErrorMessage={formData.fechaInicio.showError}
-          validationMessage={fechaValidationMessage}
-          placeholder={fechaInicioResult}
-        />
+        <div className="datepicker-container">
+          <div className="input-label\">
+            <label>Fecha Inicio:</label>
+          </div>
+          <DatePicker
+            selected={formData.fechaInicio.value}
+            onChange={(date) => onValueChange(date, 'fechaInicio')}
+            dateFormat="dd/MM/yyyy"
+            placeholderText={fechaInicioResult}
+          />
+          {formData.fechaInicio.showError && (
+            <div className="error-message">{fechaValidationMessage}</div>
+          )}
+        </div>
 
-        <Input
-          field='fechaFin'
-          label={'Fecha Fin:'}
-          type='text'
-          value={formData.fechaFin.value}
-          onChangeHandler={onValueChange}
-          onBlurHandler={handleValidationOnBlur}
-          showErrorMessage={formData.fechaFin.showError}
-          validationMessage={fechaValidationMessage}
-          placeholder={fechaFinResult}
-        />
+        <div className="datepicker-container">
+          <div className="input-label">
+            <label>Fecha Fin:</label>
+          </div>
+          <DatePicker
+            selected={formData.fechaFin.value}
+            onChange={(date) => onValueChange(date, 'fechaFin')}
+            dateFormat="dd/MM/yyyy"
+            placeholderText={fechaFinResult}
+          />
+          {formData.fechaFin.showError && (
+            <div className="error-message">{fechaValidationMessage}</div>
+          )}
+        </div>
 
 
         <Input
@@ -212,8 +218,9 @@ export const AgendaView = ({ setestado }) => {
           onBlurHandler={handleValidationOnBlur}
           showErrorMessage={formData.activo.showError}
           validationMessage={activoValidationMessage}
-          placeholder={activo !== undefined && activo !== null ? activo.toString() : ''}
+          placeholder={activo !== undefined && activo !== null ? activo.toString()=='true' ? 'Activada' : 'Desactivada' : 'Desactivada'}
         />
+
         <div style={{display:'flex', width:'50%', gap:'10%'}}>
           <button style={{backgroundColor:'#53bdeb'}} disabled={isSubmitButtonDisable}>Actualizar</button>
           <button style={{backgroundColor:'red'}} onClick={handleNaviteToAgendas}>Cancelar</button>

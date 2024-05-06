@@ -16,12 +16,12 @@ export const validatePasswordConfirm = (pass, confirmPass)=>{
 
 
 export const validateUsername = (username)=>{
-    const regex = /^\S{3,20}$/
+    const regex = /^[A-Za-z0-9\s]+$/g
     return regex.test(username)
 }
 
 export const validateCaracteres = (cadena)=>{
-    const regex = /^[a-zA-Z\s]{3,20}$/
+    const regex = /^[a-zA-Z\s]{3,50}$/
     return regex.test(cadena)
 }
 
@@ -36,14 +36,21 @@ export const convertedFecha = (fecha)=>{
 }
 
 export const validateActivo = (activo)=>{
-    const regex = /^(true|false)$/
+    const regex = /^(activada|desactivada|Activada|Desactivada)$/
     return regex.test(activo)
 }
+
+export const cambioTrueFalse = (activo)=>{
+    if(activo == 'activada' || activo == 'Activada')
+        return 'true'
+    else
+        return 'false'
+} 
 
 export const emailValidationMessage = 'Por favor ingresa un correo válido'
 export const passwordValidationMessage = 'La contraseña debe tener entre 6 y 12 caracteres y no tenes espacios vacíos'
 export const passConfirmationValidationMessage = 'La contraseña no coincide'
-export const usernameValidationMessage = 'Nombre de usuario inválido, mínimo 3 máximo 8 caracteres. No se aceptan espacios'
+export const usernameValidationMessage = 'Nombre de usuario inválido, mínimo 3. No se aceptan espacios'
 export const cadenaValidationMessage = 'No se aceptan caracteres especiales'
 export const fechaValidationMessage = 'Fecha incorrecta el formato es: dia/mes/año'
-export const activoValidationMessage = 'Solo palabra true | false no se aceptan otra'
+export const activoValidationMessage = 'Solo palabra Activada | Desactivada no se aceptan otra'
