@@ -35,6 +35,12 @@ export const convertedFecha = (fecha)=>{
     return `${partes[2]}-${partes[1]}-${partes[0]}`
 }
 
+export const fechaPosteior = (fechaInicio, fechaFin) => {
+    const fechaInicioConvertida = new Date(convertedFecha(fechaInicio));
+    const fechaFinConvertida = new Date(convertedFecha(fechaFin));
+    return fechaFinConvertida > fechaInicioConvertida;
+}
+
 export const validateActivo = (activo)=>{
     const regex = /^(activada|desactivada|Activada|Desactivada)$/
     return regex.test(activo)

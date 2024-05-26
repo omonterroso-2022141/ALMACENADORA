@@ -13,9 +13,10 @@ export const Agendas = ({ dataAgendas = [] }) => {
     window.location.reload()
   }
 
-  const actualizar = () => {
-    navigate(`/agendas/${event.target.id}`)
-  }
+  const actualizar = (event) => {
+    navigate(`/agendas/${event.target.id}`);
+  };
+  
 
   return (
     <div>

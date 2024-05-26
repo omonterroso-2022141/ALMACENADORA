@@ -5,15 +5,20 @@ export const testAgenda = (req, res)=>{
     return res.send({message: 'Conectado a Agenda'})
 }
 
-export const addAgenda = async(req, res)=>{
+export const addAgenda = async (req, res) => {
     console.log('Entro');
-    try{
+    try {
         let { uid } = req.user
-        let { nombre, descripcion, fechaInicio, fechaFin, activo} = req.body
+        let { nombre, descripcion, fechaInicio, fechaFin, activo } = req.body
 
-        let existUser = UserModel.findOne({_id: uid})
+        let existUser = await UserModel.findOne({ _id: uid })
 
-        if(!existUser) return res.status(404).json({msg: 'No existe el usuario'})
+        if (!existUser) return res.status(404).json({ msg: 'No existe el usuario' })
+
+     
+        if (new Date(fechaFin) <= new Date(fechaInicio)) {
+            return res.status(400).json({ msg: 'La fecha de cierre debe ser posterior a la fecha de inicio' })
+        }
 
         const tarea = await Agenda.create({
             nombre,
@@ -27,15 +32,16 @@ export const addAgenda = async(req, res)=>{
         return res.status(200).json({
             msg: "Notes has been added to database",
             userDetails: {
-              nombre: tarea.nombre,
-              descripcion: tarea.descripcion,
+                nombre: tarea.nombre,
+                descripcion: tarea.descripcion,
             },
         })
-    }catch(err){
+    } catch (err) {
         console.error(err)
-        return res.status(500).send({message: err}) 
+        return res.status(500).send({ message: err })
     }
 }
+
 
 export const viewAgenda = async (req, res) => {
     try {
@@ -86,17 +92,25 @@ export const updatedAgenda = async (req, res) => {
         let existAgenda = await Agenda.findOne({ _id: id })
         
         if (!existAgenda)
-            return res.status(404).send({ message: 'The Notes not exist' })
+            return res.status(404).send({ message: 'La nota no existe' })
         
-        let data = req.body
+        let { fechaInicio, fechaFin } = req.body
+        
+        console.log('Fecha de inicio:', fechaInicio);
+        console.log('Fecha de fin:', fechaFin);
+
+        if (new Date(fechaFin) <= new Date(fechaInicio)) {
+            return res.status(400).json({ message: 'La fecha de finalización debe ser posterior a la fecha de inicio' })
+        }
+        
         let agendaUpdate = await Agenda.findOneAndUpdate(
             { _id: id },
-            data,
+            req.body,
             { new: true }
         )
         
         if (!agendaUpdate)
-            return res.status(401).send({ message: 'The Notes could not be updated' })
+            return res.status(401).send({ message: 'La nota no pudo ser actualizada' })
         
         return res.status(200).json({
             agendaUpdate,
@@ -106,6 +120,7 @@ export const updatedAgenda = async (req, res) => {
         return res.status(500).send({ message: err })
     }
 }
+
 
 export const deleteAgenda = async (req, res) => {
     try {

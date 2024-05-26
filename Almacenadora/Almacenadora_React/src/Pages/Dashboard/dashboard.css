@@ -122,23 +122,29 @@
     width: 90%;
 }
 
+
 .channels-card {
     padding: 10px 10px 10px 20px;
     margin-left: 20px;
     margin-top: 10px;
-    /*display: flex;
-    flex-direction: column;*/
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    background-color: #202c33;
+    transition: border-color 0.2s ease; 
     width: 80%;
     border-radius: 15px;
+    border: 3px solid #202c33; 
+    background-color: #202c33; 
 }
 
-.channels-card:hover {
-    transform: scale(1.02);
-    background-color: #2a3942;
+
+.channels-card.active {
+    border-color: rgb(0, 255, 0); 
 }
+
+
+.channels-card.inactive {
+    border-color: rgb(255, 0, 0); 
+}
+
+
 
 
 .hover-navbar:hover{
@@ -159,11 +165,23 @@
     height: 200px;
 }
 
-.channels-card-title {
+/* Estilo por defecto para el texto de la tarjeta */
+.channels-card-title,
+.channels-card-text {
     font-size: 20px;
-    /*margin-top: 5px;*/
-    /*margin-bottom: 5px;*/
-    color: white;
+    color: white; /* Color por defecto */
+}
+
+/* Estilo para el texto cuando el estado es activo */
+.channels-card.active .channels-card-title,
+.channels-card.active .channels-card-text {
+    color: white; /* Cambia el color del texto cuando el estado es activo */
+}
+
+/* Estilo para el texto cuando el estado es inactivo */
+.channels-card.inactive .channels-card-title,
+.channels-card.inactive .channels-card-text {
+    color: rgb(70, 69, 69); /* Cambia el color del texto cuando el estado es inactivo */
 }
 
 .channels-card-text {
